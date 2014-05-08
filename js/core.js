@@ -76,3 +76,69 @@ var utils = (function () {
         isAPartOf: isAPartOf
     }
 })();
+
+var derivativesLoader = (function () {
+
+    var derivatives = [];
+
+    function load() {
+        loadJson();
+    }
+
+    function loadJson() {
+        d3.json('/Taylor/Matlab/derivates.json', function (data) {
+            var taylorFunctions = data.functions,
+                taylorFunctionsLength = taylorFunctions.length,
+                i,
+                j,
+                k,
+                element,
+                derivativesNumber,
+                step,
+                right,
+                num,
+                func,
+                array,
+                derivative;
+
+            for (i = 0; i < taylorFunctionsLength; i += 1) {
+
+                element = taylorFunctions[i];
+                derivativesNumber = element.derivatesNumber;
+                step = element.step;
+                right = element.right;
+                func = [];
+
+                for (num = element.left, j = 0; num <= right; num += step, j +=1) {
+
+                    func[j] = [];
+                    array = func[j];
+
+                    for (k = 0; k < derivativesNumber; k += 1) {
+
+                        derivative = element.derivates[j][k] || 0;
+                        array.push(derivative);
+                    }
+                }
+
+                derivatives.push(func);
+            }
+
+            core.jsonGot();
+        });
+    }
+
+    function getDerivatives() {
+        return utils.extendDeep(derivatives);
+    }
+
+    return {
+        /**
+         * Метод, который загружает массив производных в себя.
+         * Он может их либо загружать напрямую
+         */
+        load: load,
+
+        getDerivatives: getDerivatives
+    }
+})();
