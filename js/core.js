@@ -1,6 +1,7 @@
 var core = (function () {
 
-    var graph;
+    var graph,
+        derivatives;
 
     function init() {
 
@@ -12,10 +13,21 @@ var core = (function () {
             "xlabel": "X Axis",
             "ylabel": "Y Axis"
         });
+
+        derivativesLoader.load();
+    }
+
+    function jsonGot() {
+
+        derivatives = derivativesLoader.getDerivatives();
+
+        console.log("json got! Derivatives length: " + derivatives.length);
     }
 
     return {
-        init: init
+        init: init,
+
+        jsonGot: jsonGot
     };
 })();
 
@@ -86,7 +98,7 @@ var derivativesLoader = (function () {
     }
 
     function loadJson() {
-        d3.json('/Taylor/Matlab/derivates.json', function (data) {
+        d3.json('/TaylorApp/resources/derivatives.json', function (data) {
             var taylorFunctions = data.functions,
                 taylorFunctionsLength = taylorFunctions.length,
                 i,
