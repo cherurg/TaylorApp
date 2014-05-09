@@ -55,6 +55,14 @@ taylor.core.registerModule(function (app) {
                 return this.y(this.functionPoints[i].y);
             });
 
+        this.taylorLine = d3.svg.line()
+            .x(function (d, i) {
+                return this.x(this.taylorPoints[i].x);
+            })
+            .y(function (d, i) {
+                return this.y(this.taylorPoints[i].y);
+            });
+
         var xrange = (this.options.xmax - this.options.xmin),
             yrange2 = (this.options.ymax - this.options.ymin) / 2,
             yrange4 = yrange2 / 2,
@@ -65,8 +73,10 @@ taylor.core.registerModule(function (app) {
         }, self);*/
 
         this.func = options.func;
+        this.tay = options.tay;
        // console.log(options.func(0));
         this.functionPoints = [];
+        this.taylorPoints = [];
 
         this.vis = d3.select(this.chart).append("svg")
             .attr("width", this.cx)
@@ -170,6 +180,9 @@ taylor.core.registerModule(function (app) {
         self.functionPlot
             .attr("d", self.line(self.functionPoints))
             .attr("style", "stroke: #aaaaaa;");
+
+        self.taylorPlot
+            .attr("d", self.taylorLine(self.taylorPoints));
 
 /*        var circle = this.vis.select("svg").selectAll("circle")
             .data(this.functionPoints, function (d) {
@@ -432,6 +445,27 @@ taylor.core.registerModule(function (app) {
                 return point;
             }, self);
 
+            self.taylorPoints = d3.range(datacount).map(function (i) {
+                var x = i * xrange/datacount + left,
+                    y = self.func(i * xrange/datacount + left - 1),
+                    point = {
+                        x: x
+                    },
+                    delta = (top - down)*0.05;
+
+                if (y > top) {
+                    point.y = top + delta;
+
+                } else if (y < down) {
+                    point.y = down - delta;
+
+                } else {
+                    point.y = y;
+                }
+
+                return point;
+            }, self);
+
             if(typeof self.graph == "undefined") {
                 self.graph = self.vis.append("svg")
                     .attr("top", 0)
@@ -442,6 +476,10 @@ taylor.core.registerModule(function (app) {
                     .attr("class", "line");
 
                 self.functionPlot = self.graph
+                    .append("path")
+                    .attr("class", "line");
+
+                self.taylorPlot = self.graph
                     .append("path")
                     .attr("class", "line");
             }
