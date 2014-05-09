@@ -119,6 +119,51 @@ taylor.derivativesLoader = (function () {
 
     var derivatives = [];
 
+    var functions = [
+        function (x) {
+            return (1 + x + x*x)/(1 - x + x*x);
+        },
+
+        function (x) {
+            return x/(x*x + x + 1);
+        },
+
+        function (x) {
+            return (5*x*x)/(x*x + 2*x + 3);
+        },
+
+        function (x) {
+            return (2*x*x*x - 4*x*x + x + 1)/(x*x + 3*x + 1);
+        },
+
+        function (x) {
+            return Math.sin(x);
+        },
+
+        function (x) {
+            return Math.cos(x);
+        },
+
+        function (x) {
+            return Math.tan(x);
+        },
+
+        function (x) {
+            return Math.exp(x);
+        }
+    ];
+
+    var functionsString = [
+        "(1 + x + x^2)/(1 - x + x^2)",
+        "x/(x^2 + x + 1)",
+        "(5*x^2)/(x^2 + 2*x + 3)",
+        "(2*x^3 - 4*x^2 + x + 1)/(x^2 + 3*x + 1)",
+        "sin(x)",
+        "cos(x)",
+        "tan(x)",
+        "exp(x)"
+    ];
+
     function load() {
         loadJson();
     }
@@ -170,6 +215,14 @@ taylor.derivativesLoader = (function () {
         return taylor.utils.extendDeep(derivatives);
     }
 
+    function getFunction(i) {
+        return functions[i];
+    }
+
+    function getFunctionString(i) {
+        return functionsString[i];
+    }
+
     return {
         /**
          * Метод, который загружает массив производных в себя.
@@ -177,7 +230,11 @@ taylor.derivativesLoader = (function () {
          */
         load: load,
 
-        getDerivatives: getDerivatives
+        getDerivatives: getDerivatives,
+
+        getFunction: getFunction,
+
+        getFunctionString: getFunctionString
     }
 })();
 
