@@ -24,12 +24,15 @@ taylor.core = (function () {
 
         derivatives = taylor.derivativesLoader.getDerivatives();
 
-/*      polynomial = new taylor.polynomial(derivatives[0][1001]);
-        var pol2 = new taylor.polynomial(derivatives[0][1500]);
+
+/*        var pol2 = new taylor.polynomial(derivatives[0][1500]);
 
         console.log(polynomial.func(0));
         console.log(pol2.func(0));*/
         //console.log("json got! Derivatives length: " + derivatives.length);
+
+        polynomial = new taylor.polynomial(derivatives[0][1001]);
+        graph.setFunctions(polynomial.func);
     }
 
     function registerModule(func) {

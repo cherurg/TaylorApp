@@ -64,6 +64,7 @@ taylor.core.registerModule(function (app) {
             return { x: i * xrange / datacount, y: this.options.ymin + yrange4 + Math.random() * yrange2 };
         }, self);*/
 
+        this.functions = [];
         this.points = [];
 
         this.vis = d3.select(this.chart).append("svg")
@@ -76,9 +77,9 @@ taylor.core.registerModule(function (app) {
             .attr("width", this.size.width)
             .attr("height", this.size.height)
             .style("fill", "#EEEEEE")
-            .attr("pointer-events", "all")
-            .on("mousedown.drag", self.plot_drag())
-            .on("touchstart.drag", self.plot_drag());
+            .attr("pointer-events", "all");
+/*            .on("mousedown.drag", self.plot_drag())
+            .on("touchstart.drag", self.plot_drag());*/
         this.plot.call(d3.behavior.zoom().x(this.x).y(this.y).on("zoom", this.redraw()));
 
         this.vis.append("svg")
@@ -148,14 +149,12 @@ taylor.core.registerModule(function (app) {
                 self.points.push(newpoint);
                 self.points.sort(function (a, b) {
                     if (a.x < b.x) {
-                        return -1
+                        return -1;
                     }
-                    ;
                     if (a.x > b.x) {
-                        return  1
+                        return  1;
                     }
-                    ;
-                    return 0
+                    return 0;
                 });
                 self.selected = newpoint;
                 self.update();
@@ -425,7 +424,19 @@ taylor.core.registerModule(function (app) {
         }
     };
 
-    app.SimpleGraph.prototype.addFunction = function (func) {
+    app.SimpleGraph.prototype.setFunctions = function (func) {
+    /*  var xrange = (this.options.xmax - this.options.xmin),
+        yrange2 = (this.options.ymax - this.options.ymin) / 2,
+        yrange4 = yrange2 / 2,
+        datacount = this.size.width / 30;
+
+        this.points = d3.range(datacount).map(function (i) {
+        return { x: i * xrange / datacount, y: this.options.ymin + yrange4 + Math.random() * yrange2 };
+        }, this);
+
+        this.redraw()();*/
+
+        //this.functions.push(func);
 
     };
 });
