@@ -312,9 +312,11 @@ taylor.core.registerModule(function (app) {
         }
     };
 
-    app.SimpleGraph.prototype.redraw = function () {
+    app.SimpleGraph.prototype.redraw = function() {
         var self = this;
-        return function () {
+        return function() {
+            var zoom = d3.behavior.zoom().x(self.x).y(self.y).on("zoom", self.redraw());
+
             var tx = function (d) {
                     return "translate(" + self.x(d) + ",0)";
                 },
@@ -397,7 +399,36 @@ taylor.core.registerModule(function (app) {
                 .on("touchstart.drag", self.yaxis_drag());*/
 
             gy.exit().remove();
-            self.plot.call(d3.behavior.zoom().x(self.x).y(self.y).on("zoom", self.redraw()));
+
+
+            self.plot.call(zoom);
+
+            var datacount = self.size.width,
+                left = self.x.domain()[0],
+                right = self.x.domain()[1],
+                xrange =  (right - left);
+            self.points = d3.range(datacount).map(function (i) {
+                return {
+                    x: i * xrange/datacount + left,
+                    y: Math.sin(i * xrange/datacount + left)
+                };
+            }, self);
+
+            if(typeof self.graph == "undefined") {
+                self.graph = self.vis.append("svg")
+                    .attr("top", 0)
+                    .attr("left", 0)
+                    .attr("width", self.size.width)
+                    .attr("height", self.size.height)
+                    .attr("viewBox", "0 0 "+self.size.width+" "+self.size.height)
+                    .attr("class", "line")
+                    .append("path")
+                    .attr("class", "line");
+            }
+
+            self.graph
+                .attr("d", self.line(self.points));
+
             self.update();
         }
     };
