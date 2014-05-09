@@ -18,14 +18,17 @@ taylor.core = (function () {
         });
 
         taylor.derivativesLoader.load();
-
-        polynomial = taylor.polynomial.init();
     }
 
     function jsonGot() {
 
         derivatives = taylor.derivativesLoader.getDerivatives();
 
+
+        polynomial = new taylor.polynomial(derivatives[0][1001]);
+        var pol2 = new taylor.polynomial(derivatives[0][1500]);
+
+        console.log(polynomial.valueAtPoint(0));
         //console.log("json got! Derivatives length: " + derivatives.length);
     }
 
@@ -161,32 +164,43 @@ taylor.derivativesLoader = (function () {
     }
 })();
 
-taylor.polynomial = (function () {
-
-    var coefficients,
-        degree,
-        constants = {
-            DEFAULT_DEGREE: 50
-        };
-
-    function init(polynomialCoefficients) {
+/**
+ * Полиномы
+ */
+(function (app) {
+    app.polynomial = function (polynomialCoefficients) {
         var i;
 
         if (typeof polynomialCoefficients === "undefined") {
-            coefficients = [];
+            polynomialCoefficients = [];
             for (i = 0; i < constants.DEFAULT_DEGREE; i += 1) {
-                coefficients.push(0);
+                polynomialCoefficients.push(0);
             }
+        }
 
-        } else if (Array.isArray(polynomialCoefficients)) {
-            console.log("Polynomial coefficients array got!");
+        if (Array.isArray(polynomialCoefficients)) {
+            this.setCoefficients(polynomialCoefficients);
 
         } else {
             throw TypeError();
         }
-    }
+    };
 
-    return {
-        init: init
-    }
-})();
+    app.polynomial.prototype.setCoefficients = function (polynomialCoefficients) {
+        this.degree = polynomialCoefficients.length;
+        this.coefficients = taylor.utils.extendDeep(polynomialCoefficients);
+    };
+
+    app.polynomial.prototype.valueAtPoint = function (x) {
+        var i,
+            value = 0,
+            pow = 1;
+
+        for (i = 0; i < this.degree; i += 1) {
+            value += this.coefficients[i] * pow;
+            pow *= x;
+        }
+
+        return value;
+    };
+})(taylor);
