@@ -167,7 +167,7 @@ taylor.core.registerModule(function (app) {
 
     app.SimpleGraph.prototype.update = function () {
         var self = this;
-        var lines = self.vis.select("path")
+        self.functionPlot
             .attr("d", self.line(self.functionPoints))
             .attr("style", "stroke: #aaaaaa;");
 
@@ -233,7 +233,6 @@ taylor.core.registerModule(function (app) {
                 self.dragged.y = self.y.invert(Math.max(0, Math.min(self.size.height, p[1])));
                 self.update();
             }
-            ;
             if (!isNaN(self.downx)) {
                 d3.select('body').style("cursor", "ew-resize");
                 var rupx = self.x.invert(p[0]),
@@ -250,7 +249,6 @@ taylor.core.registerModule(function (app) {
                 d3.event.preventDefault();
                 d3.event.stopPropagation();
             }
-            ;
             if (!isNaN(self.downy)) {
                 d3.select('body').style("cursor", "ns-resize");
                 var rupy = self.y.invert(p[1]),
@@ -441,7 +439,9 @@ taylor.core.registerModule(function (app) {
                     .attr("width", self.size.width)
                     .attr("height", self.size.height)
                     .attr("viewBox", "0 0 "+self.size.width+" "+self.size.height)
-                    .attr("class", "line")
+                    .attr("class", "line");
+
+                self.functionPlot = self.graph
                     .append("path")
                     .attr("class", "line");
             }
