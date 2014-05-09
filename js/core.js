@@ -33,8 +33,8 @@ taylor.core = (function () {
         console.log(str);*/
         //console.log(polynomial.func(0));
         graph = new taylor.SimpleGraph("chart1", {
-            "xmax": 60, "xmin": 0,
-            "ymax": 40, "ymin": 0,
+            "xmax": 10, "xmin": -10,
+            "ymax": 10, "ymin": -10,
             "title": "Simple Graph1",
             "xlabel": "X Axis",
             "ylabel": "Y Axis",

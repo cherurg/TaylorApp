@@ -134,11 +134,11 @@ taylor.core.registerModule(function (app) {
                 .attr("transform", "translate(" + -40 + " " + this.size.height / 2 + ") rotate(-90)");
         }
 
-        d3.select(this.chart)
+      /* d3.select(this.chart)
             .on("mousemove.drag", self.mousemove())
-            .on("touchmove.drag", self.mousemove())
+            .on("touchmove.drag", self.mousemove())//todo: вернуть! Проблема была в том, что круг возвращался на нулевую позицию после драга графика.
             .on("mouseup.drag", self.mouseup())
-            .on("touchend.drag", self.mouseup());
+            .on("touchend.drag", self.mouseup());*/
 
         this.redraw()();
     };
@@ -183,37 +183,6 @@ taylor.core.registerModule(function (app) {
 
         self.taylorPlot
             .attr("d", self.taylorLine(self.taylorPoints));
-
-
-        self.circlex = self.x(0);
-        self.circley = self.y(0);
-
-        if (typeof self.circle === "undefined") {
-            self.dragBehavior = d3.behavior.drag()
-                .origin(self.circle)
-                .on("drag", circleDrag);
-
-            function circleDrag() {
-                self.circlex = d3.event.x;
-                self.circle
-                    .attr("cx", d3.event.x);
-            }
-
-            self.circle = self.vis.select("svg")
-                .append("circle")
-                .attr("cx", self.circlex)
-                .attr("cy", self.circley)
-                .attr("r", 5.0)
-                .style("cursor", "default")
-                .style("fill", "red")
-                .style("stroke", "red")
-                .style("fill-opacity", "100")
-                .call(self.dragBehavior);
-        } else {
-            self.circle
-                .attr("cx", self.circlex)
-                .attr("cy", self.circley);
-        }
 
 
 /*        var circle = this.vis.select("svg").selectAll("circle")
@@ -284,6 +253,7 @@ taylor.core.registerModule(function (app) {
                     xaxis1 = self.x.domain()[0],
                     xaxis2 = self.x.domain()[1],
                     xextent = xaxis2 - xaxis1;
+
                 if (rupx != 0) {
                     var changex, new_domain;
                     changex = self.downx / rupx;
@@ -519,6 +489,39 @@ taylor.core.registerModule(function (app) {
 /*            self.graph
                 .attr("d", self.line(self.functionPoints))
                 .style("color", "#666666");*/
+
+            self.circlex = self.x(0);
+            self.circley = self.y(0);
+
+            if (typeof self.circle === "undefined") {
+                self.dragBehavior = d3.behavior.drag()
+                    .origin(self.circle)
+                    .on("drag", circleDrag);
+
+                function circleDrag() {
+                    self.circlex = d3.event.x;
+                    self.circle
+                        .attr("cx", d3.event.x);
+
+                    console.log(self.x.invert(d3.event.x).toFixed(2));
+                    //taylor.core.getTaylor()
+                }
+
+                self.circle = self.vis.select("svg")
+                    .append("circle")
+                    .attr("cx", self.circlex)
+                    .attr("cy", self.circley)
+                    .attr("r", 4.0)
+                    .style("cursor", "default")
+                    .style("fill", "red")
+                    .style("stroke", "red")
+                    .style("fill-opacity", "100")
+                    .call(self.dragBehavior);
+            } else {
+                self.circle
+                    .attr("cx", self.circlex)
+                    .attr("cy", self.circley);
+            }
 
             self.update();
         }
