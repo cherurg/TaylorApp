@@ -64,9 +64,8 @@ taylor.core.registerModule(function (app) {
             return { x: i * xrange / datacount, y: this.options.ymin + yrange4 + Math.random() * yrange2 };
         }, self);*/
 
-        this.functions = [];
+        this.func = options.func;
        // console.log(options.func(0));
-        this.functions.push(options.func);
         this.points = [];
 
         this.vis = d3.select(this.chart).append("svg")
@@ -414,7 +413,7 @@ taylor.core.registerModule(function (app) {
 
             self.points = d3.range(datacount).map(function (i) {
                 var x = i * xrange/datacount + left,
-                    y = self.functions[0](i * xrange/datacount + left),
+                    y = self.func(i * xrange/datacount + left),
                     point = {
                         x: x
                     },
@@ -486,6 +485,6 @@ taylor.core.registerModule(function (app) {
 
         this.redraw()();*/
 
-        this.functions.push(func);
+        this.func = func;
     };
 });
