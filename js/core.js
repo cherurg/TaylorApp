@@ -1,7 +1,10 @@
-var core = (function () {
+var taylor = taylor || {};
+
+taylor.core = (function () {
 
     var graph,
-        derivatives;
+        derivatives,
+        polynomial;
 
     function init() {
 
@@ -14,14 +17,16 @@ var core = (function () {
             "ylabel": "Y Axis"
         });
 
-        derivativesLoader.load();
+        taylor.derivativesLoader.load();
+
+        polynomial = taylor.polynomial.init();
     }
 
     function jsonGot() {
 
-        derivatives = derivativesLoader.getDerivatives();
+        derivatives = taylor.derivativesLoader.getDerivatives();
 
-        console.log("json got! Derivatives length: " + derivatives.length);
+        //console.log("json got! Derivatives length: " + derivatives.length);
     }
 
     return {
@@ -31,7 +36,8 @@ var core = (function () {
     };
 })();
 
-var utils = (function () {
+//todo: создать утилиту, проверяющую тип данных.
+taylor.utils = (function () {
 
     var extendDeep = function (parent, child) {
         var i,
@@ -89,7 +95,7 @@ var utils = (function () {
     }
 })();
 
-var derivativesLoader = (function () {
+taylor.derivativesLoader = (function () {
 
     var derivatives = [];
 
@@ -136,12 +142,12 @@ var derivativesLoader = (function () {
                 derivatives.push(func);
             }
 
-            core.jsonGot();
+            taylor.core.jsonGot();
         });
     }
 
     function getDerivatives() {
-        return utils.extendDeep(derivatives);
+        return taylor.utils.extendDeep(derivatives);
     }
 
     return {
@@ -152,5 +158,35 @@ var derivativesLoader = (function () {
         load: load,
 
         getDerivatives: getDerivatives
+    }
+})();
+
+taylor.polynomial = (function () {
+
+    var coefficients,
+        degree,
+        constants = {
+            DEFAULT_DEGREE: 50
+        };
+
+    function init(polynomialCoefficients) {
+        var i;
+
+        if (typeof polynomialCoefficients === "undefined") {
+            coefficients = [];
+            for (i = 0; i < constants.DEFAULT_DEGREE; i += 1) {
+                coefficients.push(0);
+            }
+
+        } else if (Array.isArray(polynomialCoefficients)) {
+            console.log("Polynomial coefficients array got!");
+
+        } else {
+            throw TypeError();
+        }
+    }
+
+    return {
+        init: init
     }
 })();
