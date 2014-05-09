@@ -56,7 +56,6 @@ taylor.core = (function () {
     };
 })();
 
-//todo: создать утилиту, проверяющую тип данных.
 taylor.utils = (function () {
 
     var extendDeep = function (parent, child) {
