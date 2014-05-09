@@ -172,7 +172,7 @@ taylor.derivativesLoader = (function () {
 /**
  * Полиномы
  */
-(function (app) {
+taylor.core.registerModule(function (app) {
     app.polynomial = function (polynomialCoefficients) {
         var i;
 
@@ -208,4 +208,4 @@ taylor.derivativesLoader = (function () {
 
         return value;
     };
-})(taylor);
+});
