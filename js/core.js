@@ -24,7 +24,7 @@ taylor.core = (function () {
         console.log(pol2.func(0));*/
         //console.log("json got! Derivatives length: " + derivatives.length);
 
-        polynomial = new taylor.polynomial(derivatives[0][1001]);
+        polynomial = new taylor.polynomial(derivatives[4][1000]);
         /*var str = "[";
         for (var i = 0; i < derivatives[0][1001].length - 1; i += 1) {
             str += derivatives[0][1001][i] + ", ";
@@ -38,8 +38,11 @@ taylor.core = (function () {
             "title": "Simple Graph1",
             "xlabel": "X Axis",
             "ylabel": "Y Axis",
-            "func": function (x) { /*return polynomial.func(x); */
+            "func": function (x) {
                 return taylor.derivativesLoader.getFunction(4)(x); //todo: у номер 3 есть разрыв. Надо не прорисовывать в нем путь.
+            },
+            "tay": function (x) {
+                return polynomial.func(x);
             }
         });
         //graph.setFunctions(polynomial.func);

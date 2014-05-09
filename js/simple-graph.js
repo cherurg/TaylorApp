@@ -447,7 +447,7 @@ taylor.core.registerModule(function (app) {
 
             self.taylorPoints = d3.range(datacount).map(function (i) {
                 var x = i * xrange/datacount + left,
-                    y = self.func(i * xrange/datacount + left - 1),
+                    y = self.tay(i * xrange/datacount + left),
                     point = {
                         x: x
                     },
