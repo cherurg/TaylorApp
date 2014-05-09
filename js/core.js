@@ -38,7 +38,9 @@ taylor.core = (function () {
             "title": "Simple Graph1",
             "xlabel": "X Axis",
             "ylabel": "Y Axis",
-            "func": function (x) { return polynomial.func(x); }
+            "func": function (x) { /*return polynomial.func(x); */
+                return taylor.derivativesLoader.getFunction(4)(x); //todo: у номер 3 есть разрыв. Надо не прорисовывать в нем путь.
+            }
         });
         //graph.setFunctions(polynomial.func);
     }

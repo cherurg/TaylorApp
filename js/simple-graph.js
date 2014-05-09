@@ -167,7 +167,9 @@ taylor.core.registerModule(function (app) {
 
     app.SimpleGraph.prototype.update = function () {
         var self = this;
-        var lines = this.vis.select("path").attr("d", this.line(this.points));
+        var lines = self.vis.select("path")
+            .attr("d", self.line(self.points))
+            .attr("style", "stroke: #aaaaaa;");
 
 /*        var circle = this.vis.select("svg").selectAll("circle")
             .data(this.points, function (d) {
@@ -444,8 +446,9 @@ taylor.core.registerModule(function (app) {
                     .attr("class", "line");
             }
 
-            self.graph
-                .attr("d", self.line(self.points));
+/*            self.graph
+                .attr("d", self.line(self.points))
+                .style("color", "#666666");*/
 
             self.update();
         }
