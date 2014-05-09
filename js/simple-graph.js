@@ -49,10 +49,10 @@ taylor.core.registerModule(function (app) {
 
         this.line = d3.svg.line()
             .x(function (d, i) {
-                return this.x(this.points[i].x);
+                return this.x(this.functionPoints[i].x);
             })
             .y(function (d, i) {
-                return this.y(this.points[i].y);
+                return this.y(this.functionPoints[i].y);
             });
 
         var xrange = (this.options.xmax - this.options.xmin),
@@ -60,13 +60,13 @@ taylor.core.registerModule(function (app) {
             yrange4 = yrange2 / 2,
             datacount = this.size.width / 30;
 
-/*        this.points = d3.range(datacount).map(function (i) {
+/*        this.functionPoints = d3.range(datacount).map(function (i) {
             return { x: i * xrange / datacount, y: this.options.ymin + yrange4 + Math.random() * yrange2 };
         }, self);*/
 
         this.func = options.func;
        // console.log(options.func(0));
-        this.points = [];
+        this.functionPoints = [];
 
         this.vis = d3.select(this.chart).append("svg")
             .attr("width", this.cx)
@@ -92,7 +92,7 @@ taylor.core.registerModule(function (app) {
             .attr("class", "line")
             .append("path")
             .attr("class", "line")
-            .attr("d", this.line(this.points));
+            .attr("d", this.line(this.functionPoints));
 
         // add Chart Title
         if (this.options.title) {
@@ -147,8 +147,8 @@ taylor.core.registerModule(function (app) {
                 var newpoint = {};
                 newpoint.x = self.x.invert(Math.max(0, Math.min(self.size.width, p[0])));
                 newpoint.y = self.y.invert(Math.max(0, Math.min(self.size.height, p[1])));
-                self.points.push(newpoint);
-                self.points.sort(function (a, b) {
+                self.functionPoints.push(newpoint);
+                self.functionPoints.sort(function (a, b) {
                     if (a.x < b.x) {
                         return -1;
                     }
@@ -168,11 +168,11 @@ taylor.core.registerModule(function (app) {
     app.SimpleGraph.prototype.update = function () {
         var self = this;
         var lines = self.vis.select("path")
-            .attr("d", self.line(self.points))
+            .attr("d", self.line(self.functionPoints))
             .attr("style", "stroke: #aaaaaa;");
 
 /*        var circle = this.vis.select("svg").selectAll("circle")
-            .data(this.points, function (d) {
+            .data(this.functionPoints, function (d) {
                 return d;
             });
 
@@ -305,9 +305,9 @@ taylor.core.registerModule(function (app) {
                 case 8: // backspace
                 case 46:
                 { // delete
-                    var i = self.points.indexOf(self.selected);
-                    self.points.splice(i, 1);
-                    self.selected = self.points.length ? self.points[i > 0 ? i - 1 : 0] : null;
+                    var i = self.functionPoints.indexOf(self.selected);
+                    self.functionPoints.splice(i, 1);
+                    self.selected = self.functionPoints.length ? self.functionPoints[i > 0 ? i - 1 : 0] : null;
                     self.update();
                     break;
                 }
@@ -413,7 +413,7 @@ taylor.core.registerModule(function (app) {
                 down = self.y.domain()[1],
                 xrange =  (right - left);
 
-            self.points = d3.range(datacount).map(function (i) {
+            self.functionPoints = d3.range(datacount).map(function (i) {
                 var x = i * xrange/datacount + left,
                     y = self.func(i * xrange/datacount + left),
                     point = {
@@ -447,7 +447,7 @@ taylor.core.registerModule(function (app) {
             }
 
 /*            self.graph
-                .attr("d", self.line(self.points))
+                .attr("d", self.line(self.functionPoints))
                 .style("color", "#666666");*/
 
             self.update();
@@ -482,7 +482,7 @@ taylor.core.registerModule(function (app) {
         yrange4 = yrange2 / 2,
         datacount = this.size.width / 30;
 
-        this.points = d3.range(datacount).map(function (i) {
+        this.functionPoints = d3.range(datacount).map(function (i) {
         return { x: i * xrange / datacount, y: this.options.ymin + yrange4 + Math.random() * yrange2 };
         }, this);
 
