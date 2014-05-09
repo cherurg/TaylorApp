@@ -184,6 +184,38 @@ taylor.core.registerModule(function (app) {
         self.taylorPlot
             .attr("d", self.taylorLine(self.taylorPoints));
 
+
+        self.circlex = self.x(0);
+        self.circley = self.y(0);
+
+        if (typeof self.circle === "undefined") {
+            self.dragBehavior = d3.behavior.drag()
+                .origin(self.circle)
+                .on("drag", circleDrag);
+
+            function circleDrag() {
+                self.circlex = d3.event.x;
+                self.circle
+                    .attr("cx", d3.event.x);
+            }
+
+            self.circle = self.vis.select("svg")
+                .append("circle")
+                .attr("cx", self.circlex)
+                .attr("cy", self.circley)
+                .attr("r", 5.0)
+                .style("cursor", "default")
+                .style("fill", "red")
+                .style("stroke", "red")
+                .style("fill-opacity", "100")
+                .call(self.dragBehavior);
+        } else {
+            self.circle
+                .attr("cx", self.circlex)
+                .attr("cy", self.circley);
+        }
+
+
 /*        var circle = this.vis.select("svg").selectAll("circle")
             .data(this.functionPoints, function (d) {
                 return d;
