@@ -60,9 +60,11 @@ taylor.core.registerModule(function (app) {
             yrange4 = yrange2 / 2,
             datacount = this.size.width / 30;
 
-        this.points = d3.range(datacount).map(function (i) {
+/*        this.points = d3.range(datacount).map(function (i) {
             return { x: i * xrange / datacount, y: this.options.ymin + yrange4 + Math.random() * yrange2 };
-        }, self);
+        }, self);*/
+
+        this.points = [];
 
         this.vis = d3.select(this.chart).append("svg")
             .attr("width", this.cx)
@@ -167,7 +169,7 @@ taylor.core.registerModule(function (app) {
         var self = this;
         var lines = this.vis.select("path").attr("d", this.line(this.points));
 
-        var circle = this.vis.select("svg").selectAll("circle")
+/*        var circle = this.vis.select("svg").selectAll("circle")
             .data(this.points, function (d) {
                 return d;
             });
@@ -198,13 +200,13 @@ taylor.core.registerModule(function (app) {
                 return self.y(d.y);
             });
 
-        circle.exit().remove();
+        circle.exit().remove();*/
 
         if (d3.event && d3.event.keyCode) {
             d3.event.preventDefault();
             d3.event.stopPropagation();
         }
-    }
+    };
 
     app.SimpleGraph.prototype.datapoint_drag = function () {
         var self = this;
@@ -291,7 +293,7 @@ taylor.core.registerModule(function (app) {
                 self.dragged = null
             }
         }
-    }
+    };
 
     app.SimpleGraph.prototype.keydown = function () {
         var self = this;
@@ -399,7 +401,7 @@ taylor.core.registerModule(function (app) {
             self.plot.call(d3.behavior.zoom().x(self.x).y(self.y).on("zoom", self.redraw()));
             self.update();
         }
-    }
+    };
 
     app.SimpleGraph.prototype.xaxis_drag = function () {
         var self = this;
