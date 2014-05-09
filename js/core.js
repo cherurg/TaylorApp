@@ -9,13 +9,6 @@ taylor.core = (function () {
     function init() {
 
         //todo: доработать simple-graph до нужного состояния. Постоянное количество точек на каждом участке, бесконечная прорисовка функций, цвет графика, возможность добавления своих функций. Это для начала.
-        graph = new taylor.SimpleGraph("chart1", {
-            "xmax": 60, "xmin": 0,
-            "ymax": 40, "ymin": 0,
-            "title": "Simple Graph1",
-            "xlabel": "X Axis",
-            "ylabel": "Y Axis"
-        });
 
         taylor.derivativesLoader.load();
     }
@@ -32,7 +25,22 @@ taylor.core = (function () {
         //console.log("json got! Derivatives length: " + derivatives.length);
 
         polynomial = new taylor.polynomial(derivatives[0][1001]);
-        graph.setFunctions(polynomial.func);
+        /*var str = "[";
+        for (var i = 0; i < derivatives[0][1001].length - 1; i += 1) {
+            str += derivatives[0][1001][i] + ", ";
+        }
+        str += derivatives[0][1001][derivatives[0][1001].length - 1] + "]";
+        console.log(str);*/
+        //console.log(polynomial.func(0));
+        graph = new taylor.SimpleGraph("chart1", {
+            "xmax": 60, "xmin": 0,
+            "ymax": 40, "ymin": 0,
+            "title": "Simple Graph1",
+            "xlabel": "X Axis",
+            "ylabel": "Y Axis",
+            "func": function (x) { return polynomial.func(x); }
+        });
+        //graph.setFunctions(polynomial.func);
     }
 
     function registerModule(func) {

@@ -65,6 +65,8 @@ taylor.core.registerModule(function (app) {
         }, self);*/
 
         this.functions = [];
+       // console.log(options.func(0));
+        this.functions.push(options.func);
         this.points = [];
 
         this.vis = d3.select(this.chart).append("svg")
@@ -406,12 +408,29 @@ taylor.core.registerModule(function (app) {
             var datacount = self.size.width,
                 left = self.x.domain()[0],
                 right = self.x.domain()[1],
+                top = self.y.domain()[0],
+                down = self.y.domain()[1],
                 xrange =  (right - left);
+
             self.points = d3.range(datacount).map(function (i) {
-                return {
-                    x: i * xrange/datacount + left,
-                    y: Math.sin(i * xrange/datacount + left)
-                };
+                var x = i * xrange/datacount + left,
+                    y = self.functions[0](i * xrange/datacount + left),
+                    point = {
+                        x: x
+                    },
+                    delta = (top - down)*0.05;
+
+                if (y > top) {
+                    point.y = top + delta;
+
+                } else if (y < down) {
+                    point.y = down - delta;
+
+                } else {
+                    point.y = y;
+                }
+
+                return point;
             }, self);
 
             if(typeof self.graph == "undefined") {
@@ -467,7 +486,6 @@ taylor.core.registerModule(function (app) {
 
         this.redraw()();*/
 
-        //this.functions.push(func);
-
+        this.functions.push(func);
     };
 });
