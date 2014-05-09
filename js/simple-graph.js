@@ -78,7 +78,7 @@ taylor.core.registerModule(function (app) {
             .style("fill", "#EEEEEE")
             .attr("pointer-events", "all")
             .on("mousedown.drag", self.plot_drag())
-            .on("touchstart.drag", self.plot_drag())
+            .on("touchstart.drag", self.plot_drag());
         this.plot.call(d3.behavior.zoom().x(this.x).y(this.y).on("zoom", this.redraw()));
 
         this.vis.append("svg")
@@ -282,7 +282,7 @@ taylor.core.registerModule(function (app) {
                 d3.event.preventDefault();
                 d3.event.stopPropagation();
             }
-            ;
+
             if (!isNaN(self.downy)) {
                 self.redraw()();
                 self.downy = Math.NaN;
@@ -357,9 +357,9 @@ taylor.core.registerModule(function (app) {
                 })
                 .on("mouseout", function (d) {
                     d3.select(this).style("font-weight", "normal");
-                })
-                .on("mousedown.drag", self.xaxis_drag())
-                .on("touchstart.drag", self.xaxis_drag());
+                });
+/*                .on("mousedown.drag", self.xaxis_drag())
+                .on("touchstart.drag", self.xaxis_drag());*/    //todo: поправить работу этой функции.
 
             gx.exit().remove();
 
@@ -393,9 +393,9 @@ taylor.core.registerModule(function (app) {
                 })
                 .on("mouseout", function (d) {
                     d3.select(this).style("font-weight", "normal");
-                })
-                .on("mousedown.drag", self.yaxis_drag())
-                .on("touchstart.drag", self.yaxis_drag());
+                });
+/*                .on("mousedown.drag", self.yaxis_drag())
+                .on("touchstart.drag", self.yaxis_drag());*/
 
             gy.exit().remove();
             self.plot.call(d3.behavior.zoom().x(self.x).y(self.y).on("zoom", self.redraw()));
@@ -423,5 +423,9 @@ taylor.core.registerModule(function (app) {
             var p = d3.svg.mouse(self.vis[0][0]);
             self.downy = self.y.invert(p[1]);
         }
+    };
+
+    app.SimpleGraph.prototype.addFunction = function (func) {
+
     };
 });
