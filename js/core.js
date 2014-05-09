@@ -4,7 +4,8 @@ taylor.core = (function () {
 
     var graph,
         derivatives,
-        polynomial;
+        polynomial,
+        taylorNumber = 4;
 
     function init() {
 
@@ -24,7 +25,7 @@ taylor.core = (function () {
         console.log(pol2.func(0));*/
         //console.log("json got! Derivatives length: " + derivatives.length);
 
-        polynomial = new taylor.polynomial(derivatives[4][1000]);
+        polynomial = new taylor.polynomial(derivatives[taylorNumber][1000]);
         /*var str = "[";
         for (var i = 0; i < derivatives[0][1001].length - 1; i += 1) {
             str += derivatives[0][1001][i] + ", ";
@@ -39,10 +40,10 @@ taylor.core = (function () {
             "xlabel": "X Axis",
             "ylabel": "Y Axis",
             "func": function (x) {
-                return taylor.derivativesLoader.getFunction(4)(x); //todo: у номер 3 есть разрыв. Надо не прорисовывать в нем путь.
+                return taylor.derivativesLoader.getFunction(taylorNumber)(x); //todo: у номер 3 есть разрыв. Надо не прорисовывать в нем путь.
             },
             "tay": function (x) {
-                return polynomial.func(x);
+                return polynomial.func(x, 0);
             }
         });
         //graph.setFunctions(polynomial.func);
@@ -52,12 +53,22 @@ taylor.core = (function () {
         func(taylor);
     }
 
+    function getTaylorAt(point) {
+        var arr = taylor.derivativesLoader.getTaylorAt(taylorNumber, point);
+        polynomial = new taylor.polynomial(arr);
+        graph.setTaylor(function (x) {
+            return polynomial.func(x, point);
+        })
+    }
+
     return {
         init: init,
 
         jsonGot: jsonGot,
 
-        registerModule: registerModule
+        registerModule: registerModule,
+
+        getTaylorAt: getTaylorAt
     };
 })();
 
@@ -121,9 +132,8 @@ taylor.utils = (function () {
 
 taylor.derivativesLoader = (function () {
 
-    var derivatives = [];
-
-    var functions = [
+    var derivatives = [],
+        functions = [
         function (x) {
             return (1 + x + x*x)/(1 - x + x*x);
         },
@@ -155,9 +165,8 @@ taylor.derivativesLoader = (function () {
         function (x) {
             return Math.exp(x);
         }
-    ];
-
-    var functionsString = [
+        ],
+        functionsString = [
         "(1 + x + x^2)/(1 - x + x^2)",
         "x/(x^2 + x + 1)",
         "(5*x^2)/(x^2 + 2*x + 3)",
@@ -166,7 +175,10 @@ taylor.derivativesLoader = (function () {
         "cos(x)",
         "tan(x)",
         "exp(x)"
-    ];
+        ],
+        left = -10,
+        right = 10,
+        step = 0.01;
 
     function load() {
         loadJson();
@@ -227,6 +239,11 @@ taylor.derivativesLoader = (function () {
         return functionsString[i];
     }
 
+    function getTaylorAt(funcNum, point) {
+        var index = (point - left)/step;
+        return taylor.utils.extendDeep(derivatives[funcNum][index]);
+    }
+
     return {
         /**
          * Метод, который загружает массив производных в себя.
@@ -238,7 +255,9 @@ taylor.derivativesLoader = (function () {
 
         getFunction: getFunction,
 
-        getFunctionString: getFunctionString
+        getFunctionString: getFunctionString,
+
+        getTaylorAt: getTaylorAt
     }
 })();
 
@@ -267,14 +286,14 @@ taylor.core.registerModule(function (app) {
     app.polynomial.prototype.setCoefficients = function (polynomialCoefficients) {
         this.degree = polynomialCoefficients.length;
         this.coefficients = taylor.utils.extendDeep(polynomialCoefficients);
-        this.func = function (x) {
+        this.func = function (x, point) {
             var i,
                 value = 0,
                 pow = 1;
 
             for (i = 0; i < this.degree; i += 1) {
                 value += this.coefficients[i] * pow;
-                pow *= x;
+                pow *= (x - point);
             }
 
             return value;

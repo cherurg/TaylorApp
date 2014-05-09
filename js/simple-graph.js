@@ -504,7 +504,8 @@ taylor.core.registerModule(function (app) {
                         .attr("cx", d3.event.x);
 
                     console.log(self.x.invert(d3.event.x).toFixed(2));
-                    //taylor.core.getTaylor()
+                    taylor.core.getTaylorAt(self.x.invert(d3.event.x).toFixed(2));
+                    self.redraw()();
                 }
 
                 self.circle = self.vis.select("svg")
@@ -563,4 +564,8 @@ taylor.core.registerModule(function (app) {
 
         this.func = func;
     };
+
+    app.SimpleGraph.prototype.setTaylor = function (func) {
+        this.tay = func;
+    }
 });
