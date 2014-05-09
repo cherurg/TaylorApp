@@ -27,7 +27,8 @@ taylor.core = (function () {
 /*      polynomial = new taylor.polynomial(derivatives[0][1001]);
         var pol2 = new taylor.polynomial(derivatives[0][1500]);
 
-        console.log(polynomial.valueAtPoint(0));*/
+        console.log(polynomial.func(0));
+        console.log(pol2.func(0));*/
         //console.log("json got! Derivatives length: " + derivatives.length);
     }
 
@@ -194,18 +195,17 @@ taylor.core.registerModule(function (app) {
     app.polynomial.prototype.setCoefficients = function (polynomialCoefficients) {
         this.degree = polynomialCoefficients.length;
         this.coefficients = taylor.utils.extendDeep(polynomialCoefficients);
-    };
+        this.func = function (x) {
+            var i,
+                value = 0,
+                pow = 1;
 
-    app.polynomial.prototype.valueAtPoint = function (x) {
-        var i,
-            value = 0,
-            pow = 1;
+            for (i = 0; i < this.degree; i += 1) {
+                value += this.coefficients[i] * pow;
+                pow *= x;
+            }
 
-        for (i = 0; i < this.degree; i += 1) {
-            value += this.coefficients[i] * pow;
-            pow *= x;
-        }
-
-        return value;
+            return value;
+        };
     };
 });
