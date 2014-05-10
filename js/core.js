@@ -240,7 +240,7 @@ taylor.derivativesLoader = (function () {
     }
 
     function getTaylorAt(funcNum, point) {
-        var index = (point - left)/step;
+        var index = Math.round((point - left)/step);
         return taylor.utils.extendDeep(derivatives[funcNum][index]);
     }
 
