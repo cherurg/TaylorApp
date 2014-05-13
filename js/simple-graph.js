@@ -91,7 +91,7 @@ taylor.core.registerModule(function (app) {
             .attr("pointer-events", "all");
 /*            .on("mousedown.drag", self.plot_drag())
             .on("touchstart.drag", self.plot_drag());*/
-        this.plot.call(d3.behavior.zoom().x(this.x).y(this.y).on("zoom", this.redraw()));
+        this.plot.call(d3.behavior.zoom().x(this.x).y(this.y).on("zoom", this._redraw()));
 
         this.vis.append("svg")
             .attr("top", 0)
@@ -140,7 +140,7 @@ taylor.core.registerModule(function (app) {
             .on("mouseup.drag", self.mouseup())
             .on("touchend.drag", self.mouseup());*/
 
-        this.redraw()();
+        this._redraw()();
     };
 
 //
@@ -259,7 +259,7 @@ taylor.core.registerModule(function (app) {
                     changex = self.downx / rupx;
                     new_domain = [xaxis1, xaxis1 + (xextent * changex)];
                     self.x.domain(new_domain);
-                    self.redraw()();
+                    self._redraw()();
                 }
                 d3.event.preventDefault();
                 d3.event.stopPropagation();
@@ -275,7 +275,7 @@ taylor.core.registerModule(function (app) {
                     changey = self.downy / rupy;
                     new_domain = [yaxis1 + (yextent * changey), yaxis1];
                     self.y.domain(new_domain);
-                    self.redraw()();
+                    self._redraw()();
                 }
                 d3.event.preventDefault();
                 d3.event.stopPropagation();
@@ -292,14 +292,14 @@ taylor.core.registerModule(function (app) {
             d3.select('body').style("cursor", "auto");
             d3.select('body').style("cursor", "auto");
             if (!isNaN(self.downx)) {
-                self.redraw()();
+                self._redraw()();
                 self.downx = Math.NaN;
                 d3.event.preventDefault();
                 d3.event.stopPropagation();
             }
 
             if (!isNaN(self.downy)) {
-                self.redraw()();
+                self._redraw()();
                 self.downy = Math.NaN;
                 d3.event.preventDefault();
                 d3.event.stopPropagation();
@@ -328,10 +328,10 @@ taylor.core.registerModule(function (app) {
         }
     };
 
-    app.SimpleGraph.prototype.redraw = function() {
+    app.SimpleGraph.prototype._redraw = function() {
         var self = this;
         return function() {
-            var zoom = d3.behavior.zoom().x(self.x).y(self.y).on("zoom", self.redraw());
+            var zoom = d3.behavior.zoom().x(self.x).y(self.y).on("zoom", self._redraw());
 
             var tx = function (d) {
                     return "translate(" + self.x(d) + ",0)";
@@ -505,7 +505,7 @@ taylor.core.registerModule(function (app) {
 
                     console.log(self.circlex.toFixed(2));
                     taylor.core.getTaylorAt(self.circlex.toFixed(2));
-                    self.redraw()();
+                    self._redraw()();
                 }
 
                 self.circle = self.vis.select("svg")
@@ -560,12 +560,16 @@ taylor.core.registerModule(function (app) {
         return { x: i * xrange / datacount, y: this.options.ymin + yrange4 + Math.random() * yrange2 };
         }, this);
 
-        this.redraw()();*/
+        this._redraw()();*/
 
         this.func = func;
     };
 
     app.SimpleGraph.prototype.setTaylor = function (func) {
         this.tay = func;
-    }
+    };
+
+    app.SimpleGraph.prototype.redraw = function () {
+        this._redraw()();
+    };
 });

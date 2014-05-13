@@ -5,36 +5,32 @@ taylor.core = (function () {
     var graph,
         derivatives,
         polynomial,
-        taylorNumber = 4;
+        taylorNumber = 1,
+        derivativesNumber = 1,
+        _point = 0;
 
     function init() {
-
-        //todo: доработать simple-graph до нужного состояния. Постоянное количество точек на каждом участке, бесконечная прорисовка функций, цвет графика, возможность добавления своих функций. Это для начала.
-
         taylor.derivativesLoader.load();
 
         new taylor.DerivativesValue();
+    }
+
+    function setPolynomial(arr) {
+        polynomial = new taylor.polynomial(arr);
+    }
+
+    function setGraphTaylor(point) {
+        graph.setTaylor(function (x) {
+            return polynomial.func(x, point);
+        });
     }
 
     function jsonGot() {
 
         derivatives = taylor.derivativesLoader.getDerivatives();
 
+        setPolynomial(derivatives[taylorNumber][Math.round(derivatives[taylorNumber].length/2)].slice(0, derivativesNumber));
 
-/*        var pol2 = new taylor.polynomial(derivatives[0][1500]);
-
-        console.log(polynomial.func(0));
-        console.log(pol2.func(0));*/
-        //console.log("json got! Derivatives length: " + derivatives.length);
-
-        polynomial = new taylor.polynomial(derivatives[taylorNumber][1000]);
-        /*var str = "[";
-        for (var i = 0; i < derivatives[0][1001].length - 1; i += 1) {
-            str += derivatives[0][1001][i] + ", ";
-        }
-        str += derivatives[0][1001][derivatives[0][1001].length - 1] + "]";
-        console.log(str);*/
-        //console.log(polynomial.func(0));
         graph = new taylor.SimpleGraph("chart1", {
             "xmax": 10, "xmin": -10,
             "ymax": 10, "ymin": -10,
@@ -48,7 +44,6 @@ taylor.core = (function () {
                 return polynomial.func(x, 0);
             }
         });
-        //graph.setFunctions(polynomial.func);
     }
 
     function registerModule(func) {
@@ -56,11 +51,16 @@ taylor.core = (function () {
     }
 
     function getTaylorAt(point) {
+        _point = parseInt(point);
         var arr = taylor.derivativesLoader.getTaylorAt(taylorNumber, point);
-        polynomial = new taylor.polynomial(arr);
-        graph.setTaylor(function (x) {
-            return polynomial.func(x, point);
-        })
+        setPolynomial(arr.slice(0, derivativesNumber));
+        setGraphTaylor(point);
+        graph.redraw();
+    }
+
+    function setDerivativesNumber(number) {
+        derivativesNumber = parseInt(number);
+        getTaylorAt(_point);
     }
 
     return {
@@ -70,7 +70,9 @@ taylor.core = (function () {
 
         registerModule: registerModule,
 
-        getTaylorAt: getTaylorAt
+        getTaylorAt: getTaylorAt,
+
+        setDerivativesNumber: setDerivativesNumber
     };
 })();
 
