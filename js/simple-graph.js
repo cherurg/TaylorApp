@@ -490,28 +490,28 @@ taylor.core.registerModule(function (app) {
                 .attr("d", self.line(self.functionPoints))
                 .style("color", "#666666");*/
 
-            self.circlex = self.x(0);
-            self.circley = self.y(0);
-
             if (typeof self.circle === "undefined") {
+                self.circlex = 0;
+                self.circley = 0;
+
                 self.dragBehavior = d3.behavior.drag()
                     .origin(self.circle)
                     .on("drag", circleDrag);
 
                 function circleDrag() {
-                    self.circlex = d3.event.x;
+                    self.circlex = self.x.invert(d3.event.x);
                     self.circle
-                        .attr("cx", d3.event.x);
+                        .attr("cx", self.x(self.circlex));
 
-                    console.log(self.x.invert(d3.event.x).toFixed(2));
-                    taylor.core.getTaylorAt(self.x.invert(d3.event.x).toFixed(2));
+                    console.log(self.circlex.toFixed(2));
+                    taylor.core.getTaylorAt(self.circlex.toFixed(2));
                     self.redraw()();
                 }
 
                 self.circle = self.vis.select("svg")
                     .append("circle")
-                    .attr("cx", self.circlex)
-                    .attr("cy", self.circley)
+                    .attr("cx", self.x(self.circlex))
+                    .attr("cy", self.y(self.circley))
                     .attr("r", 4.0)
                     .style("cursor", "default")
                     .style("fill", "red")
@@ -520,8 +520,8 @@ taylor.core.registerModule(function (app) {
                     .call(self.dragBehavior);
             } else {
                 self.circle
-                    .attr("cx", self.circlex)
-                    .attr("cy", self.circley);
+                    .attr("cx", self.x(self.circlex))
+                    .attr("cy", self.y(self.circley));
             }
 
             self.update();
