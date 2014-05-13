@@ -10,8 +10,13 @@
 </head>
 
     <body>
+        <div class="range">
+            <p>Derivatives: <a id="derivativesNumber">0</a></p>
+            <input type="range" id="derivatives" min="0" max="50" value="50"/>
+        </div>
         <div id="chart1" class="chart"></div>
 
+        <script type="text/javascript" src="js/DOM.js"></script>
         <script type="text/javascript">
 
             taylor.core.init();

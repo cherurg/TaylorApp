@@ -12,6 +12,8 @@ taylor.core = (function () {
         //todo: доработать simple-graph до нужного состояния. Постоянное количество точек на каждом участке, бесконечная прорисовка функций, цвет графика, возможность добавления своих функций. Это для начала.
 
         taylor.derivativesLoader.load();
+
+        new taylor.DerivativesValue();
     }
 
     function jsonGot() {
