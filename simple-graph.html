@@ -14,6 +14,18 @@
             <p>Derivatives: <a id="derivativesNumber">0</a></p>
             <input type="range" id="derivatives" min="1" max="50" value="1"/>
         </div>
+        <div class="functionChoose">
+            <select id="functionChoose">
+                <option value="0">(1 + x + x^2)/(1 - x + x^2</option>
+                <option value="1" selected>x/(x^2 + x + 1)</option>
+                <option value="2">(5*x^2)/(x^2 + 2*x + 3)</option>
+                <option value="3">(2*x^3 - 4*x^2 + x + 1)/(x^2 + 3*x + 1)</option>
+                <option value="4">sin(x)</option>
+                <option value="5">cos(x)</option>
+                <option value="6">tan(x)</option>
+                <option value="7">exp(x)</option>
+            </select>
+        </div>
         <div id="chart1" class="chart"></div>
 
         <script type="text/javascript" src="js/DOM.js"></script>

@@ -572,4 +572,8 @@ taylor.core.registerModule(function (app) {
     app.SimpleGraph.prototype.redraw = function () {
         this._redraw()();
     };
+
+    app.SimpleGraph.prototype.getCircleX = function () {
+        return this.circlex.toFixed(2);
+    }
 });

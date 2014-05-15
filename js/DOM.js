@@ -17,4 +17,19 @@ taylor.core.registerModule(function (app) {
     app.DerivativesValue.prototype.elementOutputID = "#derivativesNumber";
 });
 
+taylor.core.registerModule(function (app) {
+    app.FunctionChoose = function () {
+        var self = this;
 
+        this.number = 4;
+
+        this.element = d3.select("#functionChoose")
+            .on("change", function () {
+                app.core.setTaylorNumber(self.element[0][0].value);
+            });
+    };
+
+    app.FunctionChoose.prototype.getFunctionNumber = function () {
+        return this.element[0][0].value;
+    }
+});

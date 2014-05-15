@@ -5,7 +5,7 @@ taylor.core = (function () {
     var graph,
         derivatives,
         polynomial,
-        taylorNumber = 1,
+        taylorNumber,
         derivativesNumber = 1,
         _point = 0;
 
@@ -13,6 +13,14 @@ taylor.core = (function () {
         taylor.derivativesLoader.load();
 
         new taylor.DerivativesValue();
+
+        taylorNumber = new taylor.FunctionChoose().getFunctionNumber();
+    }
+
+    function setTaylorNumber(number) {
+        taylorNumber = number;
+        //setGraphTaylor(graph.getCircleX());
+        graph.redraw();
     }
 
     function setPolynomial(arr) {
@@ -72,7 +80,9 @@ taylor.core = (function () {
 
         getTaylorAt: getTaylorAt,
 
-        setDerivativesNumber: setDerivativesNumber
+        setDerivativesNumber: setDerivativesNumber,
+
+        setTaylorNumber: setTaylorNumber
     };
 })();
 
@@ -189,7 +199,7 @@ taylor.derivativesLoader = (function () {
     }
 
     function loadJson() {
-        d3.json('/resources/derivatives.json', function (data) {
+        d3.json('/TaylorApp/resources/derivatives.json', function (data) {
             var taylorFunctions = data.functions,
                 taylorFunctionsLength = taylorFunctions.length,
                 i,
