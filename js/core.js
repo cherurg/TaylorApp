@@ -199,7 +199,7 @@ taylor.derivativesLoader = (function () {
     }
 
     function loadJson() {
-        d3.json('/TaylorApp/resources/derivatives.json', function (data) {
+        d3.json('/TaylorApp/resources/big_derivatives.json', function (data) {
             var taylorFunctions = data.functions,
                 taylorFunctionsLength = taylorFunctions.length,
                 i,
