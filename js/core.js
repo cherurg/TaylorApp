@@ -4,6 +4,8 @@ taylor.core = (function () {
 
     var graph,
         derivatives,
+        derivativesOutput,
+        radius,
         polynomial,
         taylorNumber,
         derivativesNumber = 1,
@@ -12,7 +14,7 @@ taylor.core = (function () {
     function init() {
         taylor.derivativesLoader.load();
 
-        new taylor.DerivativesValue();
+        derivativesOutput = new taylor.DerivativesValue();
 
         taylorNumber = new taylor.FunctionChoose().getFunctionNumber();
     }
@@ -20,6 +22,7 @@ taylor.core = (function () {
     function setTaylorNumber(number) {
         taylorNumber = number;
         //setGraphTaylor(graph.getCircleX());
+        derivativesOutput.resetDerivatives();
         graph.redraw();
     }
 
@@ -36,6 +39,7 @@ taylor.core = (function () {
     function jsonGot() {
 
         derivatives = taylor.derivativesLoader.getDerivatives();
+        radius = new taylor.Radius();
 
         setPolynomial(derivatives[taylorNumber][Math.round(derivatives[taylorNumber].length/2)].slice(0, derivativesNumber));
 
@@ -45,12 +49,8 @@ taylor.core = (function () {
             "title": "Simple Graph1",
             "xlabel": "X Axis",
             "ylabel": "Y Axis",
-            "func": function (x) {
-                return taylor.derivativesLoader.getFunction(taylorNumber)(x); //todo: у номер 3 есть разрыв. Надо не прорисовывать в нем путь.
-            },
-            "tay": function (x) {
-                return polynomial.func(x, 0);
-            }
+            "func": functionOnDesk,
+            "tay": functionTaylor
         });
     }
 
@@ -63,12 +63,40 @@ taylor.core = (function () {
         var arr = taylor.derivativesLoader.getTaylorAt(taylorNumber, point);
         setPolynomial(arr.slice(0, derivativesNumber));
         setGraphTaylor(point);
+
+        setRadius(point);
         graph.redraw();
     }
 
     function setDerivativesNumber(number) {
         derivativesNumber = parseInt(number);
         getTaylorAt(_point);
+    }
+
+    function functionOnDesk(x) {
+        return taylor.derivativesLoader.getFunction(taylorNumber)(x); //todo: у номер 3 есть разрыв. Надо не прорисовывать в нем путь.
+    }
+
+    function functionTaylor(x) {
+        return polynomial.func(x, 0);
+    }
+
+    function setRadius(point) {
+        var epsilon = 0.01,
+            delta = 0.01;
+        radius.setRadius(Math.abs(functionTaylor(point) - functionOnDesk(parseFloat(point))));
+
+        function f(d) {
+            return Math.abs(graph.getTaylorAt(point + d) - functionOnDesk(parseFloat(point) + d));
+        }
+
+        while (f(delta) < epsilon && f(-delta) < epsilon) {
+            delta += 0.01;
+        }
+
+        delta = Math.round(delta*100)/100;
+
+        radius.setRadius(delta);
     }
 
     return {

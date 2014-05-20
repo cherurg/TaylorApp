@@ -569,6 +569,10 @@ taylor.core.registerModule(function (app) {
         this.tay = func;
     };
 
+    app.SimpleGraph.prototype.getTaylorAt = function (point) {
+        return this.tay(point);
+    };
+
     app.SimpleGraph.prototype.redraw = function () {
         this._redraw()();
     };
