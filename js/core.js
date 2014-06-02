@@ -87,7 +87,7 @@ taylor.core = (function () {
         radius.setRadius(Math.abs(functionTaylor(point) - functionOnDesk(parseFloat(point))));
 
         function f(d) {
-            return Math.abs(graph.getTaylorAt(point + d) - functionOnDesk(parseFloat(point) + d));
+            return Math.abs(graph.getTaylorAt(parseFloat(point) + d) - functionOnDesk(parseFloat(point) + d));
         }
 
         while (f(delta) < epsilon && f(-delta) < epsilon) {
