@@ -99,6 +99,18 @@ taylor.core = (function () {
         radius.setRadius(delta);
     }
 
+    function getBounds() {
+        var o = {
+            left: Number.NEGATIVE_INFINITY,
+            right: Number.POSITIVE_INFINITY
+        };
+
+        o.left = taylor.derivativesLoader.getLeft() || o.left;
+        o.right = taylor.derivativesLoader.getRight() || o.right;
+
+        return o;
+    }
+
     return {
         init: init,
 
@@ -110,7 +122,9 @@ taylor.core = (function () {
 
         setDerivativesNumber: setDerivativesNumber,
 
-        setTaylorNumber: setTaylorNumber
+        setTaylorNumber: setTaylorNumber,
+
+        getBounds: getBounds
     };
 })();
 
@@ -286,6 +300,14 @@ taylor.derivativesLoader = (function () {
         return taylor.utils.extendDeep(derivatives[funcNum][index]);
     }
 
+    function getLeft() {
+        return left;
+    }
+
+    function getRight() {
+        return right;
+    }
+
     return {
         /**
          * Метод, который загружает массив производных в себя.
@@ -299,7 +321,11 @@ taylor.derivativesLoader = (function () {
 
         getFunctionString: getFunctionString,
 
-        getTaylorAt: getTaylorAt
+        getTaylorAt: getTaylorAt,
+
+        getRight: getRight,
+
+        getLeft: getLeft
     }
 })();
 
