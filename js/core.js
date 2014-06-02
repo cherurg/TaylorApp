@@ -12,11 +12,11 @@ taylor.core = (function () {
         _point = 0;
 
     function init() {
-        taylor.derivativesLoader.load();
-
         derivativesOutput = new taylor.DerivativesValue();
 
         taylorNumber = new taylor.FunctionChoose().getFunctionNumber();
+
+        taylor.derivativesLoader.load();
     }
 
     function setTaylorNumber(number) {
@@ -87,7 +87,7 @@ taylor.core = (function () {
         radius.setRadius(Math.abs(functionTaylor(point) - functionOnDesk(parseFloat(point))));
 
         function f(d) {
-            return Math.abs(graph.getTaylorAt(point + d) - functionOnDesk(parseFloat(point) + d));
+            return Math.abs(graph.getTaylorAt(parseFloat(point) + d) - functionOnDesk(parseFloat(point) + d));
         }
 
         while (f(delta) < epsilon && f(-delta) < epsilon) {
@@ -97,6 +97,18 @@ taylor.core = (function () {
         delta = Math.round(delta*100)/100;
 
         radius.setRadius(delta);
+    }
+
+    function getBounds() {
+        var o = {
+            left: Number.NEGATIVE_INFINITY,
+            right: Number.POSITIVE_INFINITY
+        };
+
+        o.left = taylor.derivativesLoader.getLeft() || o.left;
+        o.right = taylor.derivativesLoader.getRight() || o.right;
+
+        return o;
     }
 
     return {
@@ -110,7 +122,9 @@ taylor.core = (function () {
 
         setDerivativesNumber: setDerivativesNumber,
 
-        setTaylorNumber: setTaylorNumber
+        setTaylorNumber: setTaylorNumber,
+
+        getBounds: getBounds
     };
 })();
 
@@ -227,7 +241,11 @@ taylor.derivativesLoader = (function () {
     }
 
     function loadJson() {
-        d3.json('/TaylorApp/resources/big_derivatives.json', function (data) {
+        d3.json('/TaylorApp/resources/big_derivatives.json', g);
+
+        function g(data) {
+            data = data || big_derivatives;
+
             var taylorFunctions = data.functions,
                 taylorFunctionsLength = taylorFunctions.length,
                 i,
@@ -266,7 +284,7 @@ taylor.derivativesLoader = (function () {
             }
 
             taylor.core.jsonGot();
-        });
+        }
     }
 
     function getDerivatives() {
@@ -286,6 +304,14 @@ taylor.derivativesLoader = (function () {
         return taylor.utils.extendDeep(derivatives[funcNum][index]);
     }
 
+    function getLeft() {
+        return left;
+    }
+
+    function getRight() {
+        return right;
+    }
+
     return {
         /**
          * Метод, который загружает массив производных в себя.
@@ -299,7 +325,11 @@ taylor.derivativesLoader = (function () {
 
         getFunctionString: getFunctionString,
 
-        getTaylorAt: getTaylorAt
+        getTaylorAt: getTaylorAt,
+
+        getRight: getRight,
+
+        getLeft: getLeft
     }
 })();
 

@@ -498,8 +498,17 @@ taylor.core.registerModule(function (app) {
                     .origin(self.circle)
                     .on("drag", circleDrag);
 
+                var bounds = taylor.core.getBounds();
+
                 function circleDrag() {
                     self.circlex = self.x.invert(d3.event.x);
+
+                    if (self.circlex > bounds.right) {
+                        self.circlex = bounds.right;
+                    } else if (self.circlex < bounds.left) {
+                        self.circlex = bounds.left;
+                    }
+
                     self.circle
                         .attr("cx", self.x(self.circlex));
 
