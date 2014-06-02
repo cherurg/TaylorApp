@@ -12,11 +12,11 @@ taylor.core = (function () {
         _point = 0;
 
     function init() {
-        taylor.derivativesLoader.load();
-
         derivativesOutput = new taylor.DerivativesValue();
 
         taylorNumber = new taylor.FunctionChoose().getFunctionNumber();
+
+        taylor.derivativesLoader.load();
     }
 
     function setTaylorNumber(number) {
@@ -241,7 +241,11 @@ taylor.derivativesLoader = (function () {
     }
 
     function loadJson() {
-        d3.json('/TaylorApp/resources/big_derivatives.json', function (data) {
+        d3.json('/TaylorApp/resources/big_derivatives.json', g);
+
+        function g(data) {
+            data = data || big_derivatives;
+
             var taylorFunctions = data.functions,
                 taylorFunctionsLength = taylorFunctions.length,
                 i,
@@ -280,7 +284,7 @@ taylor.derivativesLoader = (function () {
             }
 
             taylor.core.jsonGot();
-        });
+        }
     }
 
     function getDerivatives() {
